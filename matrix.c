@@ -4,6 +4,8 @@
 
 #include "matrix.h"
 
+#define PI 3.14159265
+
 /*-------------- struct matrix *new_matrix() --------------
 Inputs:  int rows
          int cols 
@@ -80,9 +82,7 @@ void print_matrix(struct matrix *m) {
   int i, j;
   for (i = 0; i < m->rows; i++) {
     for (j = 0; (j < m->cols) ; j++ ) {
-      //      if ( m->cols == m->lastcol )
-      //	return;
-      printf("m->[%d][%d]: %G\t", i, j, m->m[i][j]);
+      printf("m->[%d][%d]: %.3lf \t", i, j, m->m[i][j]);
     }
     printf("\n");
   }
@@ -106,6 +106,14 @@ void ident(struct matrix *m) {
   }
 }
 
+void clear_matrix(struct matrix *m) {
+  int i, j;
+  for ( i = 0; i < m->rows; i++ ) {
+    for ( j = 0; j < m->cols; j++ ) {
+      m->m[i][j] = 0.0;
+    }
+  }
+}
 
 /*-------------- void scalar_mult() --------------
 Inputs:  double x
@@ -133,17 +141,30 @@ Returns:
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {
-  int i, j;
-  struct matrix *test = b;
+  int i, j, counter;
+  double sum = 0.0;
+  if (a->cols != b->rows) {
+    printf("Can't multiply matrices, row and column mismatch\n");
+    return;
+  }
+  struct matrix *test;
+  test = new_matrix(b->rows,b->cols);
+  copy_matrix( b, test );
+  
   for (i = 0; i < a->rows; i++ ) {
     for (j = 0; j < test->cols; j++ ) {
-      while (
-      b->b[i][j] = 
+      sum = 0; 
+      counter = 0;
+      while (counter < a->cols ) {
+	sum += (a->m[i][counter] * test->m[counter][j]);
+	counter++;
+      }
+      b->m[i][j] = sum;
     }
   }
+  b->rows = a->rows;
+  b->lastcol = a->cols - 1;
 }
-
-
 
 /*-------------- void copy_matrix() --------------
 Inputs:  struct matrix *a
@@ -170,7 +191,26 @@ as the translation offsets.
 ====================*/
 
 struct matrix * make_translate(double x, double y, double z) {
-  return NULL;
+  struct matrix * answer;
+  answer = new_matrix(4,4);
+  int i, j;
+  for (i = 0; i < answer->rows; i++ ) {
+    for (j = 0; j < answer->cols; j++ ) {
+      if (i == j)
+        answer->m[i][j] = 1;
+      else if ( j == 3 ) {
+	if (i == 0)
+	  answer->m[i][j] = x;
+	if (i == 1)
+          answer->m[i][j] = y;
+	if (i == 2)
+          answer->m[i][j] = z;
+      }
+      else 
+	answer->m[i][j] = 0;
+    }
+  }
+  return answer;
 }
 
 /*======== struct matrix * make_scale() ==========
@@ -181,7 +221,24 @@ Returns: The translation matrix creates using x, y and z
 as the scale factors
 ====================*/
 struct matrix * make_scale(double x, double y, double z) {
-  return NULL;  
+  struct matrix * answer;
+  answer = new_matrix(4,4);
+  int i, j;
+  for (i = 0; i < answer->rows; i++ ) {
+    for (j = 0; j < answer->cols; j++ ) {
+      if (i == 0 && j == 0)
+        answer->m[i][j] = x;
+      else if (i == 1 && j == 1)
+        answer->m[i][j] = y;
+      else if (i == 2 && j == 2)
+        answer->m[i][j] = z;
+      else if (i == 3 && j == 3)
+        answer->m[i][j] = 1;
+      else
+        answer->m[i][j] = 0;
+    }
+  }
+  return answer;
 }
 
 /*======== struct matrix * make_rotX() ==========
@@ -191,7 +248,34 @@ Returns: The rotation matrix created using theta as the
 angle of rotation and X as the axis of rotation.
 ====================*/
 struct matrix * make_rotX(double theta) {
-    return NULL;
+  struct matrix * answer;
+  answer = new_matrix(4,4);
+  int i, j;
+  for (i = 0; i < answer->rows; i++ ) {
+    for (j = 0; j < answer->cols; j++ ) {
+
+      if (i == 0 && j == 0)
+        answer->m[i][j] = 1;
+      else if (i == 3 && j == 3)
+        answer->m[i][j] = 1;
+
+      else if ( i == 1 ) {
+        if (j == 1)
+          answer->m[i][j] = cos( theta * (PI / 180));
+        if (j == 2)
+          answer->m[i][j] = -1 * sin( theta * (PI / 180));
+      }
+      else if ( i == 2 ) {
+        if (j == 1)
+          answer->m[i][j] = sin( theta * (PI / 180));
+        if (j == 2)
+          answer->m[i][j] = cos( theta * (PI / 180));
+      }
+      else
+	answer->m[i][j] = 0;
+    }
+  }
+   return answer;
 }
 
 /*======== struct matrix * make_rotY() ==========
@@ -201,7 +285,34 @@ Returns: The rotation matrix created using theta as the
 angle of rotation and Y as the axis of rotation.
 ====================*/
 struct matrix * make_rotY(double theta) {
-    return NULL;
+  struct matrix * answer;
+  answer = new_matrix(4,4);
+  int i, j;
+  for (i = 0; i < answer->rows; i++ ) {
+    for (j = 0; j < answer->cols; j++ ) {
+
+      if (i == 1 && j == 1)
+        answer->m[i][j] = 1;
+      else if (i == 3 && j == 3)
+        answer->m[i][j] = 1;
+
+      else if ( i == 0 ) {
+        if (j == 0)
+          answer->m[i][j] = cos( theta * (PI / 180));
+        if (j == 2)
+          answer->m[i][j] = -1 * sin( theta * (PI / 180));
+      } 
+      else if (i == 2 ) {
+	if (j == 0)
+          answer->m[i][j] = sin( theta * (PI / 180));
+        if (j == 2)
+          answer->m[i][j] = cos( theta * (PI / 180));
+      } 
+      else
+        answer->m[i][j] = 0;
+    }
+  }
+  return answer;
 }
 
 /*======== struct matrix * make_rotZ() ==========
@@ -211,5 +322,33 @@ Returns: The rotation matrix created using theta as the
 angle of rotation and Z as the axis of rotation.
 ====================*/
 struct matrix * make_rotZ(double theta) {
-    return NULL;
+  struct matrix * answer;
+  answer = new_matrix(4,4);
+  int i, j;
+  for (i = 0; i < answer->rows; i++ ) {
+    for (j = 0; j < answer->cols; j++ ) {
+
+      if (i == 2 && j == 2)
+        answer->m[i][j] = 1;
+      else if (i == 3 && j == 3)
+        answer->m[i][j] = 1;
+
+      else if ( i == 0 ) {
+        if (j == 0)
+          answer->m[i][j] = cos( theta * (PI / 180));
+        if (j == 1)
+          answer->m[i][j] = -1 * sin( theta * (PI / 180));
+      }
+      else if (i == 1 ) {
+        if (j == 0)
+          answer->m[i][j] = sin( theta * (PI / 180));
+        if (j == 1)
+          answer->m[i][j] = cos( theta * (PI / 180));
+      }
+      else
+        answer->m[i][j] = 0;
+    }
+  }
+  return answer;
 }
+

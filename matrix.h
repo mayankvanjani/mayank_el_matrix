@@ -14,6 +14,7 @@ void grow_matrix(struct matrix *m, int newcols);
 void copy_matrix(struct matrix *a, struct matrix *b);
 void print_matrix(struct matrix *m);
 void ident(struct matrix *m);
+void clear_matrix(struct matrix *m);
 void scalar_mult(double x, struct matrix *m);
 void matrix_mult(struct matrix *a, struct matrix *b);
 struct matrix * make_translate(double x, double y, double z);
