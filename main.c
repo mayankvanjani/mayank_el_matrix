@@ -52,7 +52,7 @@ int main() {
   printf("\n\n");
   
   ident( identity );
-  
+  /*
   printf("Testing Identity: Identity Matrix\n");
   print_matrix( identity );
   
@@ -66,8 +66,25 @@ int main() {
   printf("Testing Matrix Multiplication With (4x4) and (4x2)\n");  
   matrix_mult( tester, tester2 );
   print_matrix( tester2 );
+  */
+  printf("\n\n");
+  printf("Tester Before\n");
+  clear_matrix( tester );
+  print_matrix( tester );
+  /*
+  printf("Adding Point to tester\n");
+  add_point( tester, 1, 2, 3);
+  print_matrix( tester );
+  printf("\nAdding Point to tester again\n");
+  add_point( tester, 4, 5, 6);
+  print_matrix( tester );
+  */
+  printf("Adding Edge to Tester\n");
+  add_edge( tester, 1, 1, 1, 2, 2, 2 );
+  add_edge( tester, 3, 3, 3, 4, 4, 4 );
+  add_edge( tester, 5, 5, 5, 6, 6, 6 );
+  print_matrix( tester );
   
-
   free_matrix( tester );
   free_matrix( tester2 );
   free_matrix( transform );
