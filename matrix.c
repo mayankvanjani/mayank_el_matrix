@@ -82,7 +82,7 @@ void print_matrix(struct matrix *m) {
   int i, j;
   for (i = 0; i < m->rows; i++) {
     for (j = 0; (j < m->cols) ; j++ ) {
-      printf("m->[%d][%d]:%.3lf  ", i, j, m->m[i][j]);
+      printf("m->[%d][%d]:%.1lf  ", i, j, m->m[i][j]);
     }
     printf("\n");
   }
