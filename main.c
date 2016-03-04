@@ -129,23 +129,53 @@ ADDING EDGES
   c.green = MAX_COLOR;
   c.blue = MAX_COLOR;
 
+  /*
+  //Bottom Left Square
   add_edge( edges, 0,0,0,0,YRES/2,0 );
   add_edge( edges, 0,YRES/2,0,XRES/2,YRES/2,0 );
   add_edge( edges, XRES/2,YRES/2,0,XRES/2,0,0 );
   add_edge( edges, XRES/2,0,0,0,0,0 );
-  draw_lines( edges, s, c );
-  /*//HERE
-  add_edge( edges, 0,0,0, XRES,YRES,0 );
-  add_edge( edges, XRES,YRES,0, XRES/4*3,YRES/4*3,0 );
-  draw_lines( edges, s, c );
-  //  draw_line( 0,0,250,250,s,c);
-  print_matrix( edges );
+
+  //Top Left
+  add_edge( edges, 0,YRES/2,0,0,YRES,0 );
+  add_edge( edges, 0,YRES,0,XRES/2,YRES,0 );
+  add_edge( edges, XRES/2,YRES,0,XRES/2,YRES/2,0 );
+  add_edge( edges, XRES/2,YRES/2,0,0,XRES/2,0 );
+
+  //Top Right
+  add_edge( edges, XRES/2,YRES,0,XRES,YRES,0 );
+  add_edge( edges, XRES,YRES,0,XRES,YRES/2,0 );
+  add_edge( edges, XRES,YRES/2,0,XRES/2,YRES/2,0 );
+  add_edge( edges, XRES/2,YRES/2,0,XRES/2,YRES,0 );
+
+  //Bottom Right
+  add_edge( edges, XRES/2,YRES/2,0,XRES,YRES/2,0 );
+  add_edge( edges, XRES,YRES/2,0,XRES,0,0 );
+  add_edge( edges, XRES,0,0,XRES/2,0,0 );
+  add_edge( edges, XRES/2,0,0,XRES/2,YRES/2,0 );
+  
+  add_edge( edges, 125,125,0, 125,375,0);
+  add_edge( edges, 125,375,0, 375,375,0);
+  add_edge( edges, 375,375,0, 375,125,0);
+  add_edge( edges, 375,125,0, 125,125,0);
   */
-  //  draw_line(0,0,500,500,s,c);
+  add_edge( edges, XRES/4,YRES/4,0, XRES/4,YRES/4*3,0 );
+  add_edge( edges, XRES/4,YRES/4*3,0, XRES/4*3,YRES/4*3,0 );
+  add_edge( edges, XRES/4*3,YRES/4*3,0, XRES/4*3,YRES/4,0 );
+  add_edge( edges, XRES/4*3,YRES/4,0, XRES/4,YRES/4,0 );
+
+  //  print_matrix( transform );
+  transform = make_translate( 50, 50, 0 );
+  matrix_mult( transform, edges );
+  print_matrix( transform );
+  //  transform = scalar_mult(.5, edge
+  printf("\n");
+  print_matrix( edges );
+  draw_lines( edges, s, c );
+
+
   save_extension(s, "matrix.png" );
   display(s);
-
-
 
   free_matrix( transform );
   free_matrix( edges );

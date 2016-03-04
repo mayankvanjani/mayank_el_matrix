@@ -163,7 +163,7 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
     }
   }
   b->rows = a->rows;
-  b->lastcol = a->cols - 1;
+  b->lastcol = test->cols - 1;
 }
 
 /*-------------- void copy_matrix() --------------
