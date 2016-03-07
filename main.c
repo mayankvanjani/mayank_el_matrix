@@ -26,8 +26,6 @@ int main() {
   transform = new_matrix(4, 4);
   identity = new_matrix(4, 4);
 
-  clear_matrix(edges);
-  clear_matrix(transform);
   /*
 Different Matrices for Testing Different Matrix Operations
   struct matrix *tester;
@@ -117,16 +115,6 @@ ADDING EDGES
   z0 = 0;
   z1 = 0;
   */
-  /*
-  for (i = 0; i < 10; i++) { 
-    x0 = i * 10 + 10;
-    y0 = i * 10 + 20;
-    x1 = i;
-    y1 = i;
-    add_edge( edges, x0,y0,z0,x1,y1,z1 );
-  }
-  */
-  //  print_matrix( edges );
   
   c.red = MAX_COLOR;
   c.green = MAX_COLOR;
@@ -174,7 +162,6 @@ ADDING EDGES
   add_edge( edges, XRES-25,25,0, XRES-25,0,0 );
   add_edge( edges, XRES-25,0,0, XRES,0,0 );
   draw_lines(edges,s,c);
-  print_matrix( edges );
 
   for(i = 0; i < 20; i++){
     transform = make_rotZ( 4.5 );
