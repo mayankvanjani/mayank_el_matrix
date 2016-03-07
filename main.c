@@ -14,10 +14,7 @@ int main() {
   int i, j;
   screen s;
   color c;
-  /*
-  double counter = .5;
-  double mult = 2.5;
-  */
+
   struct matrix *edges;
   struct matrix *transform;
   struct matrix *identity;
@@ -174,8 +171,8 @@ ADDING EDGES
   clear_matrix(edges);
   clear_matrix(transform);
   c.blue = MAX_COLOR;
-  c.red = MAX_COLOR;
-  c.green = MAX_COLOR / 2 + 50;
+  c.red = 0;
+  c.green = 0;
   add_edge( edges, 200,200,0, 200,300,0 );
   add_edge( edges, 200,300,0, 300,300,0 );
   add_edge( edges, 300,300,0, 300,200,0 );
