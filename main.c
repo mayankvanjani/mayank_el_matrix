@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "ml6.h"
 #include "display.h"
 #include "draw.h"
 #include "matrix.h"
+
+#define PI 3.14159265
 
 int main() {
   int i, j;
@@ -128,51 +131,103 @@ ADDING EDGES
   c.red = MAX_COLOR;
   c.green = MAX_COLOR;
   c.blue = MAX_COLOR;
+  clear_screen(s);
 
-  /*
-  //Bottom Left Square
-  add_edge( edges, 0,0,0,0,YRES/2,0 );
-  add_edge( edges, 0,YRES/2,0,XRES/2,YRES/2,0 );
-  add_edge( edges, XRES/2,YRES/2,0,XRES/2,0,0 );
-  add_edge( edges, XRES/2,0,0,0,0,0 );
-
-  //Top Left
-  add_edge( edges, 0,YRES/2,0,0,YRES,0 );
-  add_edge( edges, 0,YRES,0,XRES/2,YRES,0 );
-  add_edge( edges, XRES/2,YRES,0,XRES/2,YRES/2,0 );
-  add_edge( edges, XRES/2,YRES/2,0,0,XRES/2,0 );
-
-  //Top Right
-  add_edge( edges, XRES/2,YRES,0,XRES,YRES,0 );
-  add_edge( edges, XRES,YRES,0,XRES,YRES/2,0 );
-  add_edge( edges, XRES,YRES/2,0,XRES/2,YRES/2,0 );
-  add_edge( edges, XRES/2,YRES/2,0,XRES/2,YRES,0 );
-
-  //Bottom Right
-  add_edge( edges, XRES/2,YRES/2,0,XRES,YRES/2,0 );
-  add_edge( edges, XRES,YRES/2,0,XRES,0,0 );
-  add_edge( edges, XRES,0,0,XRES/2,0,0 );
-  add_edge( edges, XRES/2,0,0,XRES/2,YRES/2,0 );
+  //SCALAR MULT (DILATION)
+  clear_matrix(edges);
+  clear_matrix(transform);
+  add_edge( edges, 1,1,0, 6,1,0 );
+  add_edge( edges, 6,1,0, 6,6,0 );
+  add_edge( edges, 6,6,0, 1,6,0 );
+  add_edge( edges, 1,6,0, 1,1,0 );
+  draw_lines(edges,s,c);
   
-  add_edge( edges, 125,125,0, 125,375,0);
-  add_edge( edges, 125,375,0, 375,375,0);
-  add_edge( edges, 375,375,0, 375,125,0);
-  add_edge( edges, 375,125,0, 125,125,0);
-  */
-  add_edge( edges, XRES/4,YRES/4,0, XRES/4,YRES/4*3,0 );
-  add_edge( edges, XRES/4,YRES/4*3,0, XRES/4*3,YRES/4*3,0 );
-  add_edge( edges, XRES/4*3,YRES/4*3,0, XRES/4*3,YRES/4,0 );
-  add_edge( edges, XRES/4*3,YRES/4,0, XRES/4,YRES/4,0 );
+  for(i = 0; i < 55; i++){
+    scalar_mult(1.09, edges);
+    c.red = c.red - 4;
+    draw_lines(edges,s,c);
+  }
 
-  //  print_matrix( transform );
-  transform = make_translate( 50, 50, 0 );
-  matrix_mult( transform, edges );
-  print_matrix( transform );
-  //  transform = scalar_mult(.5, edge
-  printf("\n");
+  //TRANSLATE
+  clear_matrix(edges);
+  clear_matrix(transform);
+  c.red = MAX_COLOR;
+  add_edge( edges, 0,YRES,0, 0,YRES-25,0 );
+  add_edge( edges, 0,YRES-25,0, 25,YRES-25,0 );
+  add_edge( edges, 25,YRES-25,0, 25,YRES,0 );
+  add_edge( edges, 25,YRES,0, 0,YRES,0 );
+  draw_lines(edges,s,c);
+  
+  for(i = 0; i < 20; i++){
+    transform = make_translate( 25, -25, 0 );
+    matrix_mult( transform, edges);
+    c.green = c.green - 4;
+    draw_lines(edges,s,c);
+  }
+  
+  //ROTATION
+  clear_matrix(edges);
+  clear_matrix(transform);
+  c.green = MAX_COLOR;
+  add_edge( edges, XRES,0,0, XRES,25,0 );
+  add_edge( edges, XRES,25,0, XRES-25,25,0 );
+  add_edge( edges, XRES-25,25,0, XRES-25,0,0 );
+  add_edge( edges, XRES-25,0,0, XRES,0,0 );
+  draw_lines(edges,s,c);
   print_matrix( edges );
-  draw_lines( edges, s, c );
 
+  for(i = 0; i < 20; i++){
+    transform = make_rotZ( 4.5 );
+    matrix_mult( transform, edges);
+    c.blue = c.blue - 4;
+    draw_lines(edges,s,c);
+  }
+
+  //Central Flower
+  clear_matrix(edges);
+  clear_matrix(transform);
+  c.blue = MAX_COLOR;
+  c.red = MAX_COLOR;
+  c.green = MAX_COLOR / 2 + 50;
+  add_edge( edges, 200,200,0, 200,300,0 );
+  add_edge( edges, 200,300,0, 300,300,0 );
+  add_edge( edges, 300,300,0, 300,200,0 );
+  add_edge( edges, 300,200,0, 200,200,0 );
+  draw_lines(edges,s,c);
+
+  for(i = 0; i < 36; i++){
+    transform = make_rotZ( 10 );
+    matrix_mult( transform, edges);
+    transform = make_translate( 50, -50, 0);
+    matrix_mult( transform, edges);
+    draw_lines(edges,s,c);
+  }
+
+  //NAME
+  clear_matrix(edges);
+  clear_matrix(transform);
+  c.blue = MAX_COLOR;
+  c.red = MAX_COLOR;
+  c.green = MAX_COLOR;
+  add_edge( edges, 250,0,0, 250,25,0 );//M
+  add_edge( edges, 250,25,0, 263,0,0 );
+  add_edge( edges, 263,0,0, 275,25,0 );
+  add_edge( edges, 275,25,0, 275,0,0 );
+  add_edge( edges, 280,0,0, 293,25,0 );//A
+  add_edge( edges, 293,25,0, 305,0,0 );
+  add_edge( edges, 287,13,0, 299,13,0 );
+  add_edge( edges, 310,0,0, 325,25,0 );//Y
+  add_edge( edges, 318,13,0, 305,25,0 );
+  add_edge( edges, 330,0,0, 343,25,0 );//A
+  add_edge( edges, 343,25,0, 355,0,0 );
+  add_edge( edges, 337,13,0, 349,13,0 );
+  add_edge( edges, 360,0,0, 360,25,0 );//N
+  add_edge( edges, 360,25,0, 385,0,0 );
+  add_edge( edges, 385,0,0, 385,25,0 );
+  add_edge( edges, 390,0,0, 390,25,0 );//K
+  add_edge( edges, 390,13,0, 408,25,0 );
+  add_edge( edges, 395,14,0, 408,0,0 );
+  draw_lines(edges,s,c);
 
   save_extension(s, "matrix.png" );
   display(s);

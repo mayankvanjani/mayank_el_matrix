@@ -113,6 +113,7 @@ void clear_matrix(struct matrix *m) {
       m->m[i][j] = 0.0;
     }
   }
+  m->lastcol = 0;
 }
 
 /*-------------- void scalar_mult() --------------
